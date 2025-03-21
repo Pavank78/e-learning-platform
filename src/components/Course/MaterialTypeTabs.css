@@ -1,0 +1,52 @@
+/* MaterialTypeTabs.css */
+.material-type-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 12px 0;
+    padding: 0 15px;
+  }
+  
+  .type-tab {
+    background-color: #f0f0f0;
+    color: #444;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: normal;
+  }
+  
+  .type-tab:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .type-tab.active {
+    background-color: #3498db;
+    color: white;
+    font-weight: 500;
+  }
+  
+  .no-results-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+    color: #666;
+  }
+  
+  .action-button {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .action-button:hover {
+    background-color: #e0e0e0;
+  }

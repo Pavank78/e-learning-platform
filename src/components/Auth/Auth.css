@@ -1,0 +1,96 @@
+/* Auth.css - Styling for login and registration components */
+
+.login-container, .register-container {
+    max-width: 450px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .login-container:hover, .register-container:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+  
+  .login-container h2, .register-container h2 {
+    margin-bottom: 1.5rem;
+    color: #2c3e50;
+    text-align: center;
+    position: relative;
+  }
+  
+  .login-container h2::after, .register-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.9rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+  
+  button[type="submit"] {
+    width: 100%;
+    padding: 0.9rem;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  button[type="submit"]:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+  
+  button[type="submit"]:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .error {
+    color: #e74c3c;
+    margin-bottom: 1rem;
+    padding: 0.8rem;
+    background-color: #fadbd8;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+
+  
