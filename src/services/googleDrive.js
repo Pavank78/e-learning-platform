@@ -1,6 +1,7 @@
 // src/services/googleDrive.js
-const CLIENT_ID = '33086153622-1su79eoi3lhki9f284k8biv1ee0dvr5i.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyDSfpxKnjgkIyGxcCXujQx_YTgq7QYSdZY';
+// Google Drive Config
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID;
+const API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY;
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES = 'https://www.googleapis.com/auth/drive';
 

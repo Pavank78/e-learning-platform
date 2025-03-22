@@ -18,7 +18,7 @@ const Dashboard = () => {
   const dashboardRef = useRef(null);
 
   // Your specific folder ID
-  const FOLDER_ID = '1R8E2_r3PZJUU4alK_A5URTVzxvqvBcCn';
+  const FOLDER_ID = process.env.REACT_APP_GOOGLE_DRIVE_FOLDER_ID;
   
   // Add animation to dashboard when it mounts
   useEffect(() => {
