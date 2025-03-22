@@ -1,40 +1,51 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './styles/base.css';        // Base styles
-import './styles/animations.css';  // Animation utilities
-import './styles/responsive.css';  // Responsive utilities
-import './index.css';              // Any additional global styles
+import './styles/base.css';
+import './styles/animations.css';
+import './styles/responsive.css';
+import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// Load Google API scripts programmatically
 const loadGoogleScripts = () => {
-  // Load Google API script
-  const gapiScript = document.createElement('script');
-  gapiScript.src = 'https://apis.google.com/js/api.js';
-  gapiScript.async = true;
-  gapiScript.defer = true;
-  document.head.appendChild(gapiScript);
+  return new Promise((resolve) => {
+    const gapiScript = document.createElement('script');
+    gapiScript.src = `https://apis.google.com/js/api.js?key=${process.env.REACT_APP_GOOGLE_DRIVE_API_KEY}`;
+    gapiScript.async = true;
+    gapiScript.defer = true;
 
-  // Load Google Identity Services script
-  const gisScript = document.createElement('script');
-  gisScript.src = 'https://accounts.google.com/gsi/client';
-  gisScript.async = true;
-  gisScript.defer = true;
-  document.head.appendChild(gisScript);
+    const gisScript = document.createElement('script');
+    gisScript.src = `https://accounts.google.com/gsi/client?client_id=${process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID}`;
+    gisScript.async = true;
+    gisScript.defer = true;
+
+    // Wait for both scripts to load
+    let loadedScripts = 0;
+    const checkLoaded = () => {
+      loadedScripts++;
+      if (loadedScripts === 2) resolve();
+    };
+
+    gapiScript.onload = checkLoaded;
+    gisScript.onload = checkLoaded;
+
+    document.head.appendChild(gapiScript);
+    document.head.appendChild(gisScript);
+  });
 };
 
-// Load the Google scripts before rendering the app
-loadGoogleScripts();
+// Load scripts FIRST, then render the app
+loadGoogleScripts()
+  .then(() => {
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  })
+  .catch((err) => {
+    console.error('Failed to load Google scripts:', err);
+  });
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
