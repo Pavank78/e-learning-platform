@@ -306,3 +306,25 @@ form {
       padding: 0.5rem 1rem;
     }
   }
+  .reset-toggle {
+    color: #5995fd;
+    cursor: pointer;
+    margin-top: 10px;
+    text-decoration: underline;
+    font-size: 0.9rem;
+  }
+  
+  .reset-toggle:hover {
+    color: #4d84e2;
+  }
+  
+  .success-message {
+    color: #27ae60;
+    background-color: #d5f5e3;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+    width: 100%;
+    max-width: 380px;
+  }

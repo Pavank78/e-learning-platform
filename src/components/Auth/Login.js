@@ -1,8 +1,10 @@
-// src/components/Auth/Login.js (modified)
+// src/components/Auth/Login.js (with reset password functionality)
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext';
-import './LoginAnimation.css'; // New CSS file just for animations
+import './LoginAnimation.css';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../services/firebase';
 
 const Login = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -10,7 +12,9 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const { login, signup } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -39,54 +43,111 @@ const Login = () => {
     setLoading(false);
   };
 
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+    
+    if (!email) {
+      return setError('Please enter your email address');
+    }
+
+    try {
+      setError('');
+      setMessage('');
+      setLoading(true);
+      
+      await sendPasswordResetEmail(auth, email);
+      setMessage('Password reset email sent! Check your inbox.');
+      setIsResetting(false);
+    } catch (error) {
+      setError(`Failed to reset password: ${error.message}`);
+    }
+    
+    setLoading(false);
+  };
+
   return (
     <div className={`login-animation-container ${isSignUp ? 'sign-up-mode' : ''}`}>
       <div className="forms-container">
         <div className="signin-signup">
-          <form onSubmit={handleSubmit} className="sign-in-form">
-            <h2 className="title">{isSignUp ? 'Sign Up' : 'Sign In'}</h2>
-            
-            {error && <div className="error-message">{error}</div>}
-            
-            <div className="input-field">
-              <i className="fas fa-user"></i>
-              <input 
-                type="email" 
-                placeholder="Email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            
-            <div className="input-field">
-              <i className="fas fa-lock"></i>
-              <input 
-                type="password" 
-                placeholder="Password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            
-            {isSignUp && (
+          {isResetting ? (
+            <form onSubmit={handleResetPassword} className="sign-in-form">
+              <h2 className="title">Reset Password</h2>
+              
+              {error && <div className="error-message">{error}</div>}
+              {message && <div className="success-message">{message}</div>}
+              
+              <div className="input-field">
+                <i className="fas fa-user"></i>
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              
+              <button type="submit" className="btn solid" disabled={loading}>
+                {loading ? 'Sending...' : 'Send Reset Link'}
+              </button>
+              
+              <p className="reset-toggle" onClick={() => setIsResetting(false)}>
+                Back to Sign In
+              </p>
+            </form>
+          ) : (
+            <form onSubmit={handleSubmit} className="sign-in-form">
+              <h2 className="title">{isSignUp ? 'Sign Up' : 'Sign In'}</h2>
+              
+              {error && <div className="error-message">{error}</div>}
+              {message && <div className="success-message">{message}</div>}
+              
+              <div className="input-field">
+                <i className="fas fa-user"></i>
+                <input 
+                  type="email" 
+                  placeholder="Email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
+              
               <div className="input-field">
                 <i className="fas fa-lock"></i>
                 <input 
                   type="password" 
-                  placeholder="Confirm Password" 
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="Password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
-            )}
-            
-            <button type="submit" className="btn solid" disabled={loading}>
-              {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
-            </button>
-          </form>
+              
+              {isSignUp && (
+                <div className="input-field">
+                  <i className="fas fa-lock"></i>
+                  <input 
+                    type="password" 
+                    placeholder="Confirm Password" 
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              )}
+              
+              <button type="submit" className="btn solid" disabled={loading}>
+                {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
+              </button>
+              
+              {!isSignUp && (
+                <p className="reset-toggle" onClick={() => setIsResetting(true)}>
+                  Forgot password?
+                </p>
+              )}
+            </form>
+          )}
         </div>
       </div>
 
@@ -97,7 +158,12 @@ const Login = () => {
             <p>Create an account to start your learning journey with us!</p>
             <button 
               className="btn transparent" 
-              onClick={() => setIsSignUp(true)}
+              onClick={() => {
+                setIsSignUp(true);
+                setIsResetting(false);
+                setError('');
+                setMessage('');
+              }}
             >
               Sign Up
             </button>
@@ -110,7 +176,12 @@ const Login = () => {
             <p>Sign in to continue your learning journey!</p>
             <button 
               className="btn transparent" 
-              onClick={() => setIsSignUp(false)}
+              onClick={() => {
+                setIsSignUp(false);
+                setIsResetting(false);
+                setError('');
+                setMessage('');
+              }}
             >
               Sign In
             </button>
